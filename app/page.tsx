@@ -1,26 +1,19 @@
 "use client";
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Search } from 'lucide-react';
-import { Room, RoomCard } from './RoomCard';
+import { RoomOld, RoomCard } from './RoomCard';
 
 type AvailabilityFilter = 'all' | 'available' | 'occupied';
 
-// --- MOCK DATA ---
-const MOCK_ROOMS: Room[] = [
-  { id: 101, name: "Quiet Study Pod A", capacity: 2, available: true, location: "Main Library, 2F", amenities: ["Power Outlet", "WiFi"] },
-  { id: 102, name: "Collaborative Lab 310", capacity: 8, available: false, location: "Science Hall, 3F", amenities: ["Projector", "Whiteboard", "WiFi"] },
-  { id: 103, name: "East Wing Meeting Room", capacity: 4, available: true, location: "Union Building, 1F", amenities: ["Power Outlet", "Whiteboard"] },
-  { id: 104, name: "Zen Zone Study Booth", capacity: 1, available: true, location: "Main Library, 4F", amenities: ["Quiet Zone", "Power Outlet"] },
-  { id: 105, name: "The Big Think Tank", capacity: 12, available: false, location: "Business School, BMT", amenities: ["Projector", "Video Conferencing"] },
-  { id: 106, name: "North Hall Annex 201", capacity: 6, available: true, location: "North Hall, 2F", amenities: ["Whiteboard", "Power Outlet"] },
-];
-
 // --- MAIN APP COMPONENT ---
 export default function App() {
-  const [rooms] = useState<Room[]>(MOCK_ROOMS);
+  const [rooms, setRooms] = useState<RoomOld[]>([]);
   const [filter, setFilter] = useState<AvailabilityFilter>('all');
   const [minCapacity, setMinCapacity] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
+  const [ error, setError] = useState()
+  const [ loading, setLoading] = useState<boolean>(false)
+
 
   // Handler for search input change
   const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +25,27 @@ export default function App() {
     const value = parseInt(event.target.value, 10);
     setMinCapacity(value > 0 ? value : 1);
   }, []);
+
+  const getRooms = async () => {
+            try {
+                const response = await fetch('/api/rooms');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+                const data: RoomOld[] = (await response.json())['data']
+
+                setRooms(data)
+                
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+    useEffect(() => {
+        getRooms();
+    }, []);  
 
   // Memoized filtered list of rooms
   const filteredRooms = useMemo(() => {

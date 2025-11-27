@@ -2,7 +2,7 @@
 import React from 'react';
 import { Users, MapPin, CheckCircle, XCircle } from 'lucide-react';
 
-export interface Room {
+export interface RoomOld {
   id: number;
   name: string;
   capacity: number;
@@ -12,7 +12,7 @@ export interface Room {
 }
 
 // Component for a single room card
-export const RoomCard: React.FC<{ room: Room }> = ({ room }) => {
+export const RoomCard: React.FC<{ room: RoomOld }> = ({ room }) => {
   const statusColor = room.available
     ? 'bg-green-100 text-green-700 border-green-300'
     : 'bg-red-100 text-red-700 border-red-300';
