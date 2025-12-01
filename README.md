@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Study Here Web App
 
-## Getting Started
+A Next.js app built to view available rooms to study in, deployed on Vercel.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
+- Built with **Next.js**
+- Deployed with Vercel at https://study-here.vercel.app/
+- Pulls rooms from a NoSQL DB (MongoDB)
+- Uses **useCallback** to dynamically change rooms avaliable capacity
+- Updates the UI dynamically based on rooms and their information from DB
+- Organized into different components for clarity
+- Utilizes lucide-react search to filter out rooms by name
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Components
+1. `RoomCard` – Displays the name, capacity, and button for each study space.
+2. `page.tsx` – Main page.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## How it works
+- Upon website load, useEffects loads the rooms into a React state
+- The website will dynamically render the DB items in the state using map, mapping the JSON objects to RoomCard components
+- The website calls a custom API that accesses MongoDB to fetch the rooms in the database
+- useMemo is utilized to filter the room by name and filters, if applicable. Memoized so the computation doesn't have to run every render.
+- The search string and filter states are maintained by a React state and checked when appropriate
+---
 
-To learn more about Next.js, take a look at the following resources:
+## How AI/tutorials/starter code helped
+NextJS's npx create-next-app utility was used to generate a boilerplate NextJS app and the file structure.
+AI was used to generate boilerplate code for the website and to style the website using Tailwind CSS.
+MongoDB docs were used to integrate MongoDB with NextJS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Why React (and Next.js)?
+React automatically re-renders the UI when state changes, avoiding manual DOM manipulation.
+React also has utility for optimization, such as useMemo, to prevent unnecessary computation when the app re-renders
+Next.js provides an intuitive way to use react out-of-the-box, providing boilerplate that can be easily modified for our own purposes
+Next.js also integrates smoothly with Vercel, allowing for seamless deployment of our app to a public facing domain
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
